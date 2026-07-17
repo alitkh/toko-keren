@@ -102,6 +102,9 @@ export default function Admin() {
   function edit(prod) { setP({ ...prod, active: prod.active !== false }); setShowForm(true); setTab('produk'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   async function del(id) {
     try {
+      const prod = products.find((x) => x.id === id)
+      const pics = [prod && prod.image, ...(prod && prod.images || [])].filter(Boolean)
+      await Promise.allSettled(pics.map((u) => fetch('/api/delete-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: u }) })))
       if (db) await deleteDoc(doc(db, 'products', id))
       else { demo.deleteProduct(id); setProducts(demo.getProducts()) }
       notify('Produk dihapus')
