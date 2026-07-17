@@ -559,3 +559,6 @@ textarea { width: 100%; border: 1px solid var(--line); border-radius: 10px; padd
 
 
 .product .thumb img, .flash-thumb img { width: 100% !important; height: 100% !important; object-fit: cover !important; display: block; }
+
+.slider.skeleton-banner { height: 150px; background: linear-gradient(90deg,#f0f2f5 25%,#e6e9ee 50%,#f0f2f5 75%); background-size: 200% 100%; animation: skel 1.2s infinite; border-radius: 0; }
+@keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

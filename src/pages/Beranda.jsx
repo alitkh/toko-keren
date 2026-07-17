@@ -25,8 +25,8 @@ function getCountdown() {
 export default function Beranda() {
   const { products, loading } = useProducts()
   const { cats } = useCategories()
-  const { banners } = useBanners()
-  const { settings } = useSettings()
+  const { banners, loading: bannersLoading } = useBanners()
+  const { settings, loading: settingsLoading } = useSettings()
   const { cart, add, sub } = useCart()
   const [params, setParams] = useSearchParams()
   const q = (params.get('q') || '').trim().toLowerCase()
@@ -73,7 +73,7 @@ export default function Beranda() {
   return (
     <>
       <span id="top" />
-      <BannerSlider banners={bannerList} flashOn={flashOn} flashEnd={settings?.flashEnd} />
+      <BannerSlider banners={bannerList} flashOn={flashOn} flashEnd={settings?.flashEnd} loading={bannersLoading} />
 
       <div className="searchbar">
         <MagnifyingGlass size={18} className="searchbar-ico" />

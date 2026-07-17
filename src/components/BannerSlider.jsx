@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { DUMMY_BANNERS } from '../data/dummy.js'
 
-export default function BannerSlider({ banners, flashOn, flashEnd }) {
-  const list = banners && banners.length ? banners.map((b) => ({ id: b.id, title: b.title, subtitle: b.subtitle, emoji: b.emoji, image: b.image, bg: b.color || 'linear-gradient(135deg,#1B2A4A,#FF7A1A)' })) : DUMMY_BANNERS
+export default function BannerSlider({ banners, flashOn, flashEnd, loading }) {
+  const list = banners && banners.length ? banners.map((b) => ({ id: b.id, title: b.title, subtitle: b.subtitle, emoji: b.emoji, image: b.image, bg: b.color || 'linear-gradient(135deg,#1B2A4A,#FF7A1A)' })) : (loading ? [] : DUMMY_BANNERS)
   const [i, setI] = useState(0)
   const n = list.length
 
@@ -13,6 +13,7 @@ export default function BannerSlider({ banners, flashOn, flashEnd }) {
     return () => clearInterval(t)
   }, [n])
 
+  if (!list.length) return <div className="slider skeleton-banner" />
   return (
     <div className="slider">
       <div className="slider-track" style={{ transform: `translateX(-${i * 100}%)` }}>

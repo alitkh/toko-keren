@@ -15,15 +15,15 @@ export default function Layout() {
   const { totalQty } = useCart()
   const [active, setActive] = useState(false)
   const navigate = useNavigate()
-  const { settings } = useSettings()
+  const { settings, loading: settingsLoading } = useSettings()
 
   useEffect(() => { setActive(hasActiveOrders()) }, [])
 
   const brand = settings?.brandName?.split(' ') || ['mils', 'time']
   const navy = settings?.navy || '#1B2A4A'
   const orange = settings?.orange || '#FF7A1A'
-  const logoEmoji = settings?.logoEmoji || '🍱'
-  const logoImage = settings?.logoImage || ''
+  const logoEmoji = settingsLoading ? '' : (settings?.logoEmoji || '🍱')
+  const logoImage = settingsLoading ? '' : (settings?.logoImage || '')
 
   return (
     <div className="app" style={{ '--navy': navy, '--orange': orange }}>
