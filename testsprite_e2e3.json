@@ -1,0 +1,34 @@
+idempotency-key: cli-rerun-48828550-526d-4448-93b4-18192aa91aad
+[advisory] auto-heal on (FE rerun default). If a step has drifted, healing runs and costs 0.2 credit. Disable with --no-auto-heal.
+{
+  "runId": "350f7971-2b2d-4f9d-be4f-91fa8c3757e8",
+  "testId": "4c5131e9-eea5-4507-8204-63cf9f355951",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+  "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+  "status": "blocked",
+  "source": "cli",
+  "createdAt": "2026-07-17T12:16:49.357Z",
+  "startedAt": "2026-07-17T12:17:05.911Z",
+  "finishedAt": "2026-07-17T12:18:47.716Z",
+  "codeVersion": "v1",
+  "targetUrl": "https://demo-toko-keren.vercel.app",
+  "createdFrom": "rerun:caf5f358-dab7-495a-9616-b96c303211a5",
+  "failedStepIndex": null,
+  "failureKind": null,
+  "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/1784290727100428//tmp/564de2da-259f-441b-8fd0-c7fd51d3cc08/result.webm",
+  "error": "TEST BLOCKED\n\nThe test could not be run — the application failed to render due to a client-side runtime error, preventing verification of the UI.\n\nObservations:\n- The page displays 'Terjadi kesalahan saat memuat halaman' and a red stack trace showing 'Error: Minified React error #426'.\n- The application UI (brand, bottom navigation, category grid, cart, courier form, admin tab) is not available; only the error message is visible on the page.",
+  "apiOutput": null,
+  "trace": null,
+  "stepSummary": {
+    "total": 3,
+    "completed": 3,
+    "passedCount": 2,
+    "failedCount": 1
+  },
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/4c5131e9-eea5-4507-8204-63cf9f355951"
+}
+Run finished with status: blocked. Use 'testsprite test artifact get 350f7971-2b2d-4f9d-be4f-91fa8c3757e8' to download the failure bundle.
+{
+  "error": "Run 350f7971-2b2d-4f9d-be4f-91fa8c3757e8 finished with status: blocked"
+}
+EXIT=1

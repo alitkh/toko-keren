@@ -56,6 +56,7 @@ export default function Cart() {
     stored.push(order)
     localStorage.setItem('milstime_orders', JSON.stringify(stored))
     if (db) { try { await setDoc(doc(db, 'orders', token), order) } catch (e) {} }
+    try { await fetch('/api/notify-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) }) } catch (e) {}
     clear()
     setDone(order)
   }
