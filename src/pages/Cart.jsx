@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/Cart.jsx'
 import { useProducts } from '../data/products.js'
 import { db, doc, setDoc } from '../firebase.js'
+import { useCustomer } from '../data/auth.js'
 
 export default function Cart() {
   const { cart, sub, add, remove, clear } = useCart()
+  const { user } = useCustomer()
   const { products } = useProducts()
   const [form, setForm] = useState({ name: '', phone: '', address: '' })
   const [done, setDone] = useState(null)
@@ -20,7 +22,7 @@ export default function Cart() {
     if (!items.length || !form.name) return
     const token = Math.random().toString(36).slice(2, 8).toUpperCase()
     const order = {
-      token, customerName: form.name, phone: form.phone, address: form.address,
+      token, customerName: form.name, phone: form.phone, address: form.address, userId: user?.uid || null,
       status: 'menunggu', createdAt: Date.now(),
       items: items.map((i) => ({ productId: i.id, name: i.name, qty: i.qty, price: i.price })),
       totalPrice: total, courierId: null,

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/Cart.jsx'
 import Layout from './components/Layout.jsx'
-import OwnerLayout from './components/OwnerLayout.jsx'
 import Beranda from './pages/Beranda.jsx'
 import Cart from './pages/Cart.jsx'
 import Orders from './pages/Orders.jsx'
@@ -47,9 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="/admin" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><AdminLazy /></Suspense>} />
-          <Route element={<OwnerLayout />}>
-            <Route path="/courier" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><CourierLazy /></Suspense>} />
-          </Route>
+          <Route path="/courier" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><CourierLazy /></Suspense>} />
           <Route path="/track/:token" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><TrackLazy /></Suspense>} />
         </Routes>
       </CartProvider>

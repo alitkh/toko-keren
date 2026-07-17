@@ -80,7 +80,7 @@ export default function Courier() {
   }
 
   if (!user) return (
-    <div className="wrap">
+    <div className="app"><div className="wrap">
       <div className="card">
         <h2 style={{ marginTop: 0, color: 'var(--navy)' }}>Masuk Kurir</h2>
         <form onSubmit={login}>
@@ -90,11 +90,11 @@ export default function Courier() {
         </form>
         {!db && <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>Mode demo aktif — login tanpa Firebase. GPS disimulasikan.</p>}
       </div>
-    </div>
+    </div></div>
   )
 
   return (
-    <div className="wrap">
+    <div className="app"><div className="wrap">
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
         <button className="btn ghost sm" onClick={logout}>Keluar</button>
       </div>
@@ -117,6 +117,6 @@ export default function Courier() {
               : <button className="btn block" style={{ marginTop: 10 }} onClick={() => startDelivery(o.id)}>Mulai antar</button>}
           </div>
         ))}
-      </div>
+      </div></div>
   )
 }
