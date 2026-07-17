@@ -35,7 +35,7 @@ export default function Beranda() {
   const [clock, setClock] = useState(getCountdown())
   const [openId, setOpenId] = useState(null)
 
-  const categoryList = cats.length ? cats.map((c) => ({ id: c.id, name: c.name, emoji: c.emoji })) : CATEGORIES
+  const categoryList = cats.length ? cats.map((c) => ({ id: c.id, name: c.name || c.label, emoji: c.emoji || c.label })) : CATEGORIES.map((c) => ({ ...c, name: c.label || c.name }))
   const bannerList = banners.length ? banners : null
   const flashOn = settings?.flashOn && settings?.flashEnd && new Date(settings.flashEnd) > new Date()
 
@@ -106,7 +106,7 @@ export default function Beranda() {
               const n = cart[p.id] || 0
               return (
                 <div className="flash-card" key={p.id}>
-                  <div className="flash-thumb" onClick={() => setOpenId(p.id)}>{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : p.emoji || '📦'}</div>
+                  <div className="flash-thumb" onClick={() => setOpenId(p.id)}>{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }} /> : null}<span style={{ display: p.image ? 'none' : 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>{p.emoji || '📦'}</span></div>
                   <div className="flash-name" onClick={() => setOpenId(p.id)}>{p.name}</div>
                   <div className="flash-price">Rp {price?.toLocaleString('id-ID')}</div>
                   <div className="flash-old">Rp {p.price?.toLocaleString('id-ID')}</div>
@@ -156,7 +156,7 @@ export default function Beranda() {
             return (
               <div className="product" key={p.id} onClick={() => setOpenId(p.id)}>
                 {p.flash && <span className="flash-tag">Flash</span>}
-                <div className="thumb">{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : p.emoji || '📦'}</div>
+                <div className="thumb">{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }} /> : null}<span style={{ display: p.image ? 'none' : 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>{p.emoji || '📦'}</span></div>
                 <div className="body">
                   <div className="name">{p.name}</div>
                   <div className="price">Rp {price?.toLocaleString('id-ID')}</div>
