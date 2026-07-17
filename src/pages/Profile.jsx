@@ -65,24 +65,13 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="seg">
-          <button className={tab === 'login' ? 'seg-on' : ''} onClick={() => setTab('login')}>Masuk</button>
-          <button className={tab === 'register' ? 'seg-on' : ''} onClick={() => setTab('register')}>Daftar</button>
-        </div>
-
-        <form className="card" onSubmit={tab === 'login' ? handleLogin : handleRegister}>
-          {tab === 'register' && (
-            <div className="field"><label>Nama</label><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama lengkap" /></div>
-          )}
-          <div className="field"><label>Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@contoh.com" required /></div>
-          <div className="field"><label>Password</label><input type="password" value={pass} onChange={(e) => setPass(e.target.value)} placeholder="••••••" required minLength={6} /></div>
-          {err && <div className="form-err">{err}</div>}
-          <button className="btn block" type="submit">{tab === 'login' ? 'Masuk' : 'Daftar'}</button>
-          <button className="btn google block" type="button" onClick={loginWithGoogle}>
-            <GoogleLogo size={18} weight="bold" /> Lanjut dengan Google
+        <div className="card" style={{ textAlign: 'center', padding: 24 }}>
+          <button className="btn google block" type="button" onClick={loginWithGoogle} style={{ justifyContent: 'center' }}>
+            <GoogleLogo size={20} weight="bold" /> Masuk dengan Google
           </button>
-        </form>
-        <p className="muted center" style={{ fontSize: 12 }}>Mode demo: email & password bebas (tanpa Firebase).</p>
+          {err && <div className="form-err">{err}</div>}
+          <p className="muted center" style={{ fontSize: 12, marginTop: 12 }}>Login hanya dengan Google (PRD).</p>
+        </div>
       </div>
     )
   }

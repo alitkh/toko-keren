@@ -1,28 +1,15 @@
 {
   "name": "Lospecados storefront smoke test",
   "type": "frontend",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
   "target": {
     "url": "https://demo-toko-keren.vercel.app"
   },
-  "steps": [
-    {
-      "action": "goto",
-      "value": "/"
-    },
-    {
-      "assert": "visible",
-      "selector": ".brand",
-      "description": "Header brand Lospecados tampil"
-    },
-    {
-      "assert": "visible",
-      "selector": ".product",
-      "description": "Minimal 1 produk tampil (tanpa loading state)"
-    },
-    {
-      "assert": "visible",
-      "selector": ".slider",
-      "description": "Banner slider tampil"
-    }
+  "planSteps": [
+    { "type": "action", "action": "goto", "value": "/", "description": "Buka beranda" },
+    { "type": "assertion", "assert": "visible", "selector": ".brand", "description": "Header brand Lospecados tampil" },
+    { "type": "assertion", "assert": "visible", "selector": ".product", "description": "Minimal 1 produk tampil (tanpa loading state)" },
+    { "type": "assertion", "assert": "visible", "selector": ".slider", "description": "Banner slider tampil" },
+    { "type": "assertion", "assert": "visible", "selector": ".bottomnav", "description": "Bottom navigation tampil" }
   ]
 }

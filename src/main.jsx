@@ -11,6 +11,7 @@ import { lazy, Suspense } from 'react'
 const AdminLazy = lazy(() => import('./pages/Admin.jsx'))
 const CourierLazy = lazy(() => import('./pages/Courier.jsx'))
 const TrackLazy = lazy(() => import('./pages/Track.jsx'))
+const KategoriLazy = lazy(() => import('./pages/Kategori.jsx'))
 
 import './styles.css'
 
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/kategori" element={<KategoriLazy />} />
           </Route>
           <Route path="/admin" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><AdminLazy /></Suspense>} />
           <Route path="/courier" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><CourierLazy /></Suspense>} />
@@ -53,3 +55,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </ErrorBoundary>
 )
+
+// PWA: register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
+}

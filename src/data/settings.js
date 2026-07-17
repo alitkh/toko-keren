@@ -3,7 +3,7 @@ import { db, doc, getDoc, onSnapshot, setDoc } from '../firebase.js'
 
 const LS_SETTINGS = 'milstime_settings'
 const DEFAULT_SETTINGS = {
-  brandName: 'mils time', logoEmoji: '🍱', navy: '#1B2A4A', orange: '#FF7A1A', flashOn: false, flashEnd: ''
+  brandName: 'Toko Keren', logoEmoji: '🛒', navy: '#1B2A4A', orange: '#FF7A1A', flashOn: false, flashEnd: ''
 }
 export function useSettings() {
   const [settings, setSettings] = useState(() => {

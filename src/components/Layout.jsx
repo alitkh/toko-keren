@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useCart } from '../context/Cart.jsx'
 import { useSettings } from '../data/settings.js'
-import { House, ShoppingCart, ClipboardText, User, Bell, BellRinging } from '@phosphor-icons/react'
+import { House, ShoppingCart, ClipboardText, User, Bell, BellRinging, GridFour } from '@phosphor-icons/react'
 
 function hasActiveOrders() {
   try {
@@ -45,6 +45,9 @@ export default function Layout() {
       <nav className="bottomnav">
         <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
           <House size={22} /><span>Beranda</span>
+        </NavLink>
+        <NavLink to="/kategori" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <GridFour size={22} /><span>Kategori</span>
         </NavLink>
         <NavLink to="/cart" className={({ isActive }) => (isActive ? 'active' : '')}>
           <span style={{ position: 'relative', display: 'inline-flex' }}>
