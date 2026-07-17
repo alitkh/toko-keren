@@ -11,7 +11,9 @@ export default async function handler(req, res) {
   try {
     const { url } = req.body || {}
     if (!url) return res.status(400).json({ ok: false, error: 'url required' })
-    const m = String(url).match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-zA-Z0-9]+)?$/)
+    // strip transformasi (q_auto,f_auto, dll) antara /upload/ dan public_id
+    let u = String(url).replace(/\/upload\/[^/]+\//, '/upload/')
+    const m = u.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-zA-Z0-9]+)?$/)
     if (!m) return res.status(400).json({ ok: false, error: 'not a cloudinary url' })
     const publicId = m[1]
     const r = await cloudinary.uploader.destroy(publicId)
