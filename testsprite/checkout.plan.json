@@ -1,0 +1,11 @@
+{
+  "name": "Lospecados checkout flow",
+  "type": "frontend",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+  "target": { "url": "https://demo-toko-keren.vercel.app" },
+  "planSteps": [
+    { "type": "action", "action": "goto", "value": "/cart", "description": "Buka keranjang" },
+    { "type": "assertion", "assert": "visible", "selector": ".seg", "description": "Pilihan metode COD/QRIS tampil di checkout" },
+    { "type": "assertion", "assert": "visible", "selector": "input[type=date]", "description": "Input jadwal tanggal tampil" }
+  ]
+}

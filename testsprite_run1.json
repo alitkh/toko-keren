@@ -1,0 +1,65 @@
+warning: --plan-from supplies the test definition; ignoring --project, --type. Edit the plan JSON to change these fields.
+idempotency-key: cli-create-plan-d1cbbb30-9b22-4f7f-a2ae-a9ec85df0192
+[advisory] A test named "Lospecados storefront smoke test" already exists in this project (testId: 14b79161-6f96-4e2c-9cfb-fe4e738be735). Use `testsprite test update 14b79161-6f96-4e2c-9cfb-fe4e738be735` to modify it, or proceed to create a duplicate.
+{
+  "testId": "783e5da8-a05e-4aac-bc54-579fe247fa39",
+  "type": "frontend",
+  "codeVersion": "v1",
+  "createdAt": "2026-07-17T11:16:15.083Z",
+  "planSteps": [
+    {
+      "type": "action",
+      "description": "Buka beranda"
+    },
+    {
+      "type": "assertion",
+      "description": "Header brand Lospecados tampil"
+    },
+    {
+      "type": "assertion",
+      "description": "Minimal 1 produk tampil (tanpa loading state)"
+    },
+    {
+      "type": "assertion",
+      "description": "Banner slider tampil"
+    },
+    {
+      "type": "assertion",
+      "description": "Bottom navigation tampil"
+    }
+  ],
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/783e5da8-a05e-4aac-bc54-579fe247fa39",
+  "run": {
+    "runId": "369c512a-a5ab-4b9c-b30f-85e4e05caeab",
+    "testId": "783e5da8-a05e-4aac-bc54-579fe247fa39",
+    "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+    "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+    "status": "failed",
+    "source": "cli",
+    "createdAt": "2026-07-17T11:16:15.536Z",
+    "startedAt": "2026-07-17T11:16:15.797Z",
+    "finishedAt": "2026-07-17T11:17:25.934Z",
+    "codeVersion": "v1",
+    "targetUrl": "https://demo-toko-keren.vercel.app",
+    "createdFrom": null,
+    "failedStepIndex": null,
+    "failureKind": "assertion",
+    "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/178428704347641//tmp/11f733be-afa5-4981-98c5-c2fd69fba2bc/result.webm",
+    "error": "TEST FAILURE\n\nThe expected header brand 'Lospecados' is not present on the homepage.\n\nObservations:\n- A promotional banner slider is visible near the top of the page.\n- At least one product is displayed (Flash Sale product 'Siomay Udang' is shown and not a loading placeholder).\n- Bottom navigation is present with items 'Beranda', 'Keranjang', 'Pesanan', and 'Profil'.",
+    "apiOutput": null,
+    "trace": null,
+    "stepSummary": {
+      "total": 10,
+      "completed": 10,
+      "passedCount": 1,
+      "failedCount": 9
+    },
+    "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/783e5da8-a05e-4aac-bc54-579fe247fa39"
+  }
+}
+requestId: cli_de49971d-7240-4ab4-a3c4-41068b8a7c8b
+Run finished with status: failed. Use 'testsprite test artifact get 369c512a-a5ab-4b9c-b30f-85e4e05caeab' to download the failure bundle.
+{
+  "error": "Run 369c512a-a5ab-4b9c-b30f-85e4e05caeab finished with status: failed"
+}
+EXIT=1

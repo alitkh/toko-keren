@@ -9,7 +9,7 @@ export default function Cart() {
   const { cart, sub, add, remove, clear } = useCart()
   const { user } = useCustomer()
   const { products } = useProducts()
-  const [form, setForm] = useState({ name: '', phone: '', address: '' })
+  const [form, setForm] = useState({ name: '', phone: '', address: '', method: 'cod', date: '', time: '', lat: null, lng: null, label: 'Rumah' })
   const [done, setDone] = useState(null)
   const navigate = useNavigate()
 
@@ -23,6 +23,8 @@ export default function Cart() {
     const token = Math.random().toString(36).slice(2, 8).toUpperCase()
     const order = {
       token, customerName: form.name, phone: form.phone, address: form.address, userId: user?.uid || null,
+      method: form.method, schedule: (form.date && form.time) ? `${form.date} ${form.time}` : '',
+      lat: form.lat, lng: form.lng, addressLabel: form.label,
       status: 'menunggu', createdAt: Date.now(),
       items: items.map((i) => ({ productId: i.id, name: i.name, qty: i.qty, price: i.price })),
       totalPrice: total, courierId: null,
@@ -73,7 +75,24 @@ export default function Cart() {
         <div className="section-title" style={{ marginTop: 0 }}>Data pengiriman</div>
         <div className="field"><label>Nama</label><input placeholder="Nama lengkap" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
         <div className="field"><label>No. HP</label><input placeholder="08xx" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-        <div className="field"><label>Alamat</label><textarea rows={2} placeholder="Alamat lengkap" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></div>
+        <div className="field"><label>Label alamat</label>
+          <select value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })}>
+            <option>Rumah</option><option>Kantor</option><option>Lainnya</option>
+          </select>
+        </div>
+        <div className="field"><label>Alamat</label><textarea rows={2} placeholder="Alamat lengkap + patokan" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></div>
+        <div className="field"><label>Jadwal kirim — Tanggal</label><input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
+        <div className="field"><label>Jam</label><input type="time" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} /></div>
+        <div className="section-title" style={{ marginTop: 8 }}>Metode pembayaran</div>
+        <div className="seg">
+          <button className={form.method === 'cod' ? 'seg-on' : ''} onClick={() => setForm({ ...form, method: 'cod' })}>COD</button>
+          <button className={form.method === 'qris' ? 'seg-on' : ''} onClick={() => setForm({ ...form, method: 'qris' })}>QRIS</button>
+        </div>
+        {form.method === 'qris' && (
+          <div className="qris-box">
+            <div className="muted" style={{ fontSize: 13 }}>Scan QRIS merchant untuk membayar. Admin verifikasi manual.</div>
+          </div>
+        )}
         <button className="btn block" onClick={checkout}>Pesan sekarang</button>
       </div>
     </>

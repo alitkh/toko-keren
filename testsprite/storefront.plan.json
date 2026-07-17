@@ -7,9 +7,10 @@
   },
   "planSteps": [
     { "type": "action", "action": "goto", "value": "/", "description": "Buka beranda" },
-    { "type": "assertion", "assert": "visible", "selector": ".brand", "description": "Header brand Lospecados tampil" },
+    { "type": "assertion", "assert": "visible", "selector": ".brand", "description": "Header brand Toko Keren tampil" },
     { "type": "assertion", "assert": "visible", "selector": ".product", "description": "Minimal 1 produk tampil (tanpa loading state)" },
     { "type": "assertion", "assert": "visible", "selector": ".slider", "description": "Banner slider tampil" },
-    { "type": "assertion", "assert": "visible", "selector": ".bottomnav", "description": "Bottom navigation tampil" }
+    { "type": "assertion", "assert": "visible", "selector": ".bottomnav", "description": "Bottom navigation 5 tab tampil" },
+    { "type": "assertion", "assert": "visible", "selector": "a[href='/kategori']", "description": "Tab Kategori ada di nav" }
   ]
 }

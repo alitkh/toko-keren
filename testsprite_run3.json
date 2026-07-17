@@ -1,0 +1,30 @@
+idempotency-key: cli-rerun-db7b4fce-e2de-4dcd-a501-5dcb03a09a4c
+[advisory] auto-heal on (FE rerun default). If a step has drifted, healing runs and costs 0.2 credit. Disable with --no-auto-heal.
+{
+  "runId": "6201fa9c-c1ba-4a6b-8959-dfdb20b26a80",
+  "testId": "783e5da8-a05e-4aac-bc54-579fe247fa39",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+  "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+  "status": "passed",
+  "source": "cli",
+  "createdAt": "2026-07-17T11:22:23.118Z",
+  "startedAt": "2026-07-17T11:22:41.743Z",
+  "finishedAt": "2026-07-17T11:24:29.445Z",
+  "codeVersion": "v1",
+  "targetUrl": "https://demo-toko-keren.vercel.app",
+  "createdFrom": "rerun:5061acac-71f2-4638-bba5-0a790eaecbd6",
+  "failedStepIndex": null,
+  "failureKind": null,
+  "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/1784287469259883//tmp/3d13edd6-aed0-42dc-8a1a-3e33a18d1e0d/result.webm",
+  "error": null,
+  "apiOutput": null,
+  "trace": null,
+  "stepSummary": {
+    "total": 4,
+    "completed": 4,
+    "passedCount": 4,
+    "failedCount": 0
+  },
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/783e5da8-a05e-4aac-bc54-579fe247fa39"
+}
+EXIT=0
