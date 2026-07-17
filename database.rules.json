@@ -1,6 +1,12 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "tracking": {
+      ".read": true,
+      "$orderId": {
+        ".write": "auth != null"
+      }
+    },
+    ".read": false,
+    ".write": false
   }
 }
