@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, initializeFirestore, CACHE_SIZE_UNLIMITED } from 'firebase/firestore'
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, initializeFirestore, CACHE_SIZE_UNLIMITED, arrayUnion, serverTimestamp } from 'firebase/firestore'
 import { getDatabase, ref, set, onValue, push } from 'firebase/database'
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -85,7 +85,7 @@ export async function uploadImage(file, path) {
 export { auth, db, rtdb, storage, configured }
 export {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup,
-  collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc,
+  collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, arrayUnion, serverTimestamp,
   query, where, orderBy, onSnapshot,
   ref, set, onValue, push,
   sRef, uploadBytes, getDownloadURL,

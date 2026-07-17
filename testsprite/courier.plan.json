@@ -1,0 +1,10 @@
+{
+  "name": "Lospecados courier batch",
+  "type": "frontend",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+  "target": { "url": "https://demo-toko-keren.vercel.app" },
+  "planSteps": [
+    { "type": "action", "action": "goto", "value": "/courier", "description": "Buka halaman kurir" },
+    { "type": "assertion", "assert": "visible", "selector": ".btn", "description": "Form login kurir tampil" }
+  ]
+}

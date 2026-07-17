@@ -1,35 +1,61 @@
 import { useEffect, useRef, useState } from 'react'
-import { auth, signInWithEmailAndPassword, signOut, db, collection, query, where, onSnapshot, doc, updateDoc, ref, set } from '../firebase.js'
+import { auth, signInWithEmailAndPassword, signOut, db, collection, query, where, onSnapshot, doc, updateDoc, arrayUnion, ref, set } from '../firebase.js'
 import { demo } from '../data/demoStore.js'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 const BASE = { lat: -6.2, lng: 106.8 }
+
+function haversine(a, b) {
+  const R = 6371
+  const dLat = (b.lat - a.lat) * Math.PI / 180
+  const dLng = (b.lng - a.lng) * Math.PI / 180
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(s))
+}
+
+function optimizeRoute(start, stops) {
+  const out = []
+  const rem = [...stops]
+  let cur = start
+  while (rem.length) {
+    let bi = 0, bd = Infinity
+    rem.forEach((s, i) => { const d = haversine(cur, s); if (d < bd) { bd = d; bi = i } })
+    out.push(rem[bi]); cur = rem[bi]; rem.splice(bi, 1)
+  }
+  return out
+}
 
 export default function Courier() {
   const [user, setUser] = useState(null)
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [orders, setOrders] = useState([])
-  const [active, setActive] = useState(null)
+  const [trip, setTrip] = useState(null)
+  const [route, setRoute] = useState([])
   const [pos, setPos] = useState(null)
+  const [proof, setProof] = useState(null)
+  const [codReceived, setCodReceived] = useState({})
   const watchRef = useRef(null)
-  const simRef = useRef(null)
+  const mapRef = useRef(null)
+  const elRef = useRef(null)
 
   useEffect(() => {
     demo.init()
     if (db) return auth.onAuthStateChanged((u) => setUser(u))
     setUser(demo.currentUser())
   }, [])
+
   useEffect(() => {
-    if (db && user) {
-      const q = query(collection(db, 'orders'), where('status', 'in', ['dikemas', 'dikirim']))
+    if (!user) return
+    if (db) {
+      const q = query(collection(db, 'orders'), where('status', 'in', ['dikemas', 'ditugaskan', 'dikirim']))
       return onSnapshot(q, (s) => setOrders(s.docs.map((d) => ({ id: d.id, ...d.data() }))))
     }
-    if (!db) {
-      const refresh = () => setOrders(demo.getOrders().filter((o) => ['dikemas', 'dikirim'].includes(o.status)))
-      refresh()
-      window.addEventListener('storage', refresh)
-      return () => window.removeEventListener('storage', refresh)
-    }
+    const refresh = () => setOrders(demo.getOrders().filter((o) => ['dikemas', 'ditugaskan', 'dikirim'].includes(o.status)))
+    refresh()
+    window.addEventListener('storage', refresh)
+    return () => window.removeEventListener('storage', refresh)
   }, [user])
 
   async function login(e) {
@@ -39,84 +65,144 @@ export default function Courier() {
   }
   function logout() { if (db) signOut(auth); else { demo.logout(); setUser(null) } }
 
-  function startDelivery(orderId) {
-    setActive(orderId)
-    const token = demo.getOrders().find((o) => o.id === orderId)?.token || orderId
-    if (db) updateDoc(doc(db, 'orders', orderId), { status: 'dikirim' })
-    else { demo.updateOrder(token, { status: 'dikirim' }); setOrders(demo.getOrders().filter((o) => ['dikemas', 'dikirim'].includes(o.status))) }
+  const available = orders.filter((o) => o.status === 'dikemas' && !o.courierId)
+  const myTrip = orders.filter((o) => o.status === 'ditugaskan' || o.status === 'dikirim')
 
+  async function takeTask(orderId) {
+    if (db) await updateDoc(doc(db, 'orders', orderId), { courierId: user.uid, status: 'ditugaskan' })
+    else { const t = demo.getOrders().find((o) => o.id === orderId)?.token; demo.updateOrder(t, { courierId: 'kurir', status: 'ditugaskan' }) }
+    startTrip([orderId])
+  }
+
+  function startTrip(ids) {
+    const stops = ids.map((id) => {
+      const o = orders.find((x) => x.id === id)
+      return { id, lat: o.lat || BASE.lat, lng: o.lng || BASE.lng }
+    }).filter((s) => s.lat)
+    const r = stops.length ? optimizeRoute(BASE, stops) : []
+    setTrip({ id: 'trip_' + Date.now(), orderIds: ids })
+    setRoute(r)
+  }
+
+  function startDelivery() {
+    trip.orderIds.forEach((id) => {
+      if (db) updateDoc(doc(db, 'orders', id), { status: 'dikirim' })
+      else { const t = demo.getOrders().find((o) => o.id === id)?.token; demo.updateOrder(t, { status: 'dikirim' }) }
+    })
     if (navigator.geolocation) {
       watchRef.current = navigator.geolocation.watchPosition(
         (g) => {
           const lat = g.coords.latitude, lng = g.coords.longitude
           setPos({ lat, lng })
-          if (db) set(ref('tracking/' + orderId + '/position'), { lat, lng, ts: Date.now() })
-          else demo.setTrack(token, { lat, lng, ts: Date.now() })
-        },
-        () => simulate(orderId, token),
-        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+          trip.orderIds.forEach((id) => {
+            if (db) set(ref('tracking/' + id + '/position'), { lat, lng, ts: Date.now() })
+            else { const t = demo.getOrders().find((o) => o.id === id)?.token; demo.setTrack(t, { lat, lng, ts: Date.now() }) }
+          })
+        }, () => {}, { enableHighAccuracy: true, maximumAge: 3000, timeout: 10000 }
       )
-    } else { simulate(orderId, token) }
+    }
   }
 
-  // Fallback: gerakkan posisi perlahan ke arah acak (demo tanpa GPS)
-  function simulate(orderId, token) {
-    let cur = { ...BASE }
-    simRef.current = setInterval(() => {
-      cur = { lat: cur.lat + (Math.random() - 0.5) * 0.002, lng: cur.lng + (Math.random() - 0.5) * 0.002 }
-      setPos(cur)
-      if (db) set(ref('tracking/' + orderId + '/position'), { ...cur, ts: Date.now() })
-      else demo.setTrack(token, { ...cur, ts: Date.now() })
-    }, 1500)
+  async function finishOrder(orderId) {
+    if (db) await updateDoc(doc(db, 'orders', orderId), { status: 'sampai', proof, codReceived: !!codReceived[orderId] })
+    else { const t = demo.getOrders().find((o) => o.id === orderId)?.token; demo.updateOrder(t, { status: 'sampai', proof, codReceived: !!codReceived[orderId] }) }
+    setTrip((tr) => ({ ...tr, orderIds: tr.orderIds.filter((x) => x !== orderId) }))
+    if (trip.orderIds.length <= 1) {
+      setTrip(null); setPos(null)
+      if (watchRef.current) navigator.geolocation.clearWatch(watchRef.current)
+    }
   }
 
-  function stopDelivery(orderId) {
-    if (watchRef.current) navigator.geolocation.clearWatch(watchRef.current)
-    if (simRef.current) clearInterval(simRef.current)
-    watchRef.current = null; simRef.current = null; setActive(null); setPos(null)
-    const token = demo.getOrders().find((o) => o.id === orderId)?.token || orderId
-    if (db) { updateDoc(doc(db, 'orders', orderId), { status: 'sampai' }); set(ref('tracking/' + orderId + '/position'), { lat: null, lng: null, ts: Date.now() }) }
-    else { demo.updateOrder(token, { status: 'sampai' }); demo.setTrack(token, null); setOrders(demo.getOrders().filter((o) => ['dikemas', 'dikirim'].includes(o.status))) }
-  }
+  useEffect(() => {
+    if (!elRef.current || mapRef.current || !route.length) return
+    mapRef.current = L.map(elRef.current, { zoomControl: false }).setView([BASE.lat, BASE.lng], 13)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapRef.current)
+    route.forEach((s, i) => L.marker([s.lat, s.lng]).addTo(mapRef.current).bindPopup('Stop ' + (i + 1)))
+    if (pos) L.marker([pos.lat, pos.lng]).addTo(mapRef.current).bindPopup('Kurir')
+    return () => { if (mapRef.current) { mapRef.current.remove(); mapRef.current = null } }
+  }, [route, pos])
 
-  if (!user) return (
-    <div className="app"><div className="wrap">
-      <div className="card">
-        <h2 style={{ marginTop: 0, color: 'var(--navy)' }}>Masuk Kurir</h2>
-        <form onSubmit={login}>
-          <div className="field"><label>Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="kurir@demo" /></div>
-          <div className="field"><label>Password</label><input type="password" value={pass} onChange={(e) => setPass(e.target.value)} placeholder="bebas (mode demo)" /></div>
-          <button className="btn block" type="submit">Masuk</button>
-        </form>
-        {!db && <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>Mode demo aktif — login tanpa Firebase. GPS disimulasikan.</p>}
+  if (!user) {
+    return (
+      <div className="app">
+        <div className="wrap" style={{ maxWidth: 380, margin: '0 auto', paddingTop: 40 }}>
+          <div className="brand" style={{ justifyContent: 'center', marginBottom: 20 }}>
+            <span className="brand-mark"><span className="brand-mils">mils</span><span className="brand-time">time</span><span className="brand-line" /></span>
+          </div>
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Login Kurir</h2>
+            <form onSubmit={login}>
+              <div className="field"><label>Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="kurir@milstime.com" /></div>
+              <div className="field"><label>Password</label><input type="password" value={pass} onChange={(e) => setPass(e.target.value)} placeholder="password" /></div>
+              <button className="btn block" type="submit">Masuk</button>
+            </form>
+          </div>
+        </div>
       </div>
-    </div></div>
-  )
+    )
+  }
 
   return (
-    <div className="app"><div className="wrap">
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-        <button className="btn ghost sm" onClick={logout}>Keluar</button>
+    <div className="app">
+      <div className="topbar">
+        <div className="brand">
+          <span className="brand-mark"><span className="brand-mils">mils</span><span className="brand-time">time</span><span className="brand-line" /></span>
+        </div>
+        <span className="owner-tag" onClick={logout} style={{ cursor: 'pointer' }}>Kurir • Keluar</span>
       </div>
-        {active && (
-          <div className="card" style={{ marginBottom: 12, border: '1px solid var(--orange)' }}>
-            <b>Mengantar #{active}</b>
-            {pos && <div style={{ fontSize: 13, color: 'var(--muted)' }}>GPS: {pos.lat.toFixed(5)}, {pos.lng.toFixed(5)}</div>}
-            <button className="btn block" style={{ marginTop: 8 }} onClick={() => stopDelivery(active)}>Tandai Sampai</button>
+      <div className="wrap">
+        {!trip && (
+          <div>
+            <div className="section-title">Tugas Tersedia ({available.length})</div>
+            {available.map((o) => (
+              <div className="order" key={o.id}>
+                <div className="head"><b>#{o.token}</b><span className="tag dikemas">Dikemas</span></div>
+                <div className="items">{o.items?.map((i) => `${i.name} x${i.qty}`).join(', ')}</div>
+                <div className="items">Alamat: {o.addressLabel} — {o.address}</div>
+                <div className="row"><button className="btn block sm" onClick={() => takeTask(o.id)}>Ambil Tugas</button></div>
+              </div>
+            ))}
+            {available.length === 0 && <div className="empty"><div className="big">✅</div>Tidak ada tugas tersedia.</div>}
+            {myTrip.length > 0 && (
+              <div>
+                <div className="section-title" style={{ marginTop: 16 }}>Trip Saya ({myTrip.length})</div>
+                {myTrip.map((o) => (
+                  <div className="order" key={o.id}>
+                    <div className="head"><b>#{o.token}</b><span className={`tag ${o.status}`}>{o.status}</span></div>
+                    <div className="items">{o.addressLabel} — {o.address}</div>
+                  </div>
+                ))}
+                <button className="btn block orange" onClick={() => startTrip(myTrip.map((o) => o.id))}>Mulai Pengiriman Batch</button>
+              </div>
+            )}
           </div>
         )}
-        <div className="section-title">Order menunggu kirim ({orders.length})</div>
-        {orders.length === 0 && <div className="empty"><div className="big">✅</div>Tidak ada order aktif.</div>}
-        {orders.map((o) => (
-          <div className="order" key={o.id || o.token}>
-            <div className="head"><b>#{o.token} · {o.customerName}</b><span className={`tag ${o.status}`}>{o.status}</span></div>
-            <div className="items">{o.items?.map((i) => `${i.name} x${i.qty}`).join(', ')}</div>
-            <div className="items">{o.address}</div>
-            {o.status === 'dikirim' && o.id === active
-              ? <div style={{ color: 'var(--orange)', fontWeight: 700, marginTop: 8 }}>● Live mengantar</div>
-              : <button className="btn block" style={{ marginTop: 10 }} onClick={() => startDelivery(o.id)}>Mulai antar</button>}
+        {trip && (
+          <div>
+            <div className="section-title">Trip Aktif ({trip.orderIds.length} order)</div>
+            <div ref={elRef} id="courier-map" style={{ height: 220, borderRadius: 12, marginBottom: 12 }} />
+            {trip.orderIds.map((id, i) => {
+              const o = orders.find((x) => x.id === id)
+              if (!o) return null
+              return (
+                <div className="order" key={id}>
+                  <div className="head"><b>Stop {i + 1} • #{o.token}</b><span className={`tag ${o.status}`}>{o.status}</span></div>
+                  <div className="items">{o.items?.map((it) => `${it.name} x${it.qty}`).join(', ')}</div>
+                  <div className="items">{o.addressLabel} — {o.address}</div>
+                  <div className="items">WhatsApp: <a href={`https://wa.me/${o.phone}`}>{(o.phone || '').replace(/[^0-9]/g, '')}</a></div>
+                  {o.method === 'cod' && (
+                    <label className="switch-row"><span>COD Diterima</span>
+                      <input type="checkbox" checked={!!codReceived[id]} onChange={(e) => setCodReceived({ ...codReceived, [id]: e.target.checked })} />
+                    </label>
+                  )}
+                  <div className="field"><label>Foto Bukti</label><input type="file" accept="image/*" onChange={(e) => setProof(e.target.files[0]?.name || 'bukti.jpg')} /></div>
+                  <button className="btn block sm orange" onClick={() => finishOrder(id)}>Pesanan Terkirim</button>
+                </div>
+              )
+            })}
           </div>
-        ))}
-      </div></div>
+        )}
+      </div>
+    </div>
   )
 }
