@@ -7,10 +7,13 @@ export function useBanners() {
     try { if (typeof window !== 'undefined') { const r = window.localStorage.getItem(LS_BANNERS); if (r) return JSON.parse(r) } } catch (e) {}
     return []
   })
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(() => {
+    try { if (typeof window !== 'undefined') { return !window.localStorage.getItem(LS_BANNERS) } } catch (e) {}
+    return true
+  })
 
   useEffect(() => {
-    if (!db) return
+    if (!db) { setBanners([]); setLoading(false); return }
     const unsub = onSnapshot(collection(db, 'banners'), (s) => {
       const data = s.docs.map((d) => ({ id: d.id, ...d.data() }))
       setBanners(data)

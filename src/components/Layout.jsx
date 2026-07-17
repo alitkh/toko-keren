@@ -22,8 +22,8 @@ export default function Layout() {
   const brand = settings?.brandName?.split(' ') || ['mils', 'time']
   const navy = settings?.navy || '#1B2A4A'
   const orange = settings?.orange || '#FF7A1A'
-  const logoEmoji = settingsLoading ? '' : (settings?.logoEmoji || '🍱')
-  const logoImage = settingsLoading ? '' : (settings?.logoImage || '')
+  const logoEmoji = (!settings && settingsLoading) ? '' : (settings?.logoEmoji || '🍱')
+  const logoImage = (!settings && settingsLoading) ? '' : (settings?.logoImage || '')
 
   return (
     <div className="app" style={{ '--navy': navy, '--orange': orange }}>
