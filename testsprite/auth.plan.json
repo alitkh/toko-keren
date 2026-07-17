@@ -1,0 +1,46 @@
+{
+  "name": "Lospecados login + checkout flow",
+  "type": "frontend",
+  "target": {
+    "url": "https://demo-toko-keren.vercel.app"
+  },
+  "steps": [
+    {
+      "action": "goto",
+      "value": "/profile"
+    },
+    {
+      "assert": "visible",
+      "selector": ".seg",
+      "description": "Tab Masuk/Daftar tampil (belum login)"
+    },
+    {
+      "action": "click",
+      "selector": ".seg button:nth-child(2)"
+    },
+    {
+      "assert": "visible",
+      "selector": "input[type=email]",
+      "description": "Form daftar email tampil"
+    },
+    {
+      "action": "fill",
+      "selector": "input[type=email]",
+      "value": "testuser@lospecados.id"
+    },
+    {
+      "action": "fill",
+      "selector": "input[type=password]",
+      "value": "testpass123"
+    },
+    {
+      "action": "click",
+      "selector": "button[type=submit]"
+    },
+    {
+      "assert": "visible",
+      "selector": ".profile-name",
+      "description": "Setelah daftar, profil user tampil"
+    }
+  ]
+}

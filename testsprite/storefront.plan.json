@@ -1,0 +1,28 @@
+{
+  "name": "Lospecados storefront smoke test",
+  "type": "frontend",
+  "target": {
+    "url": "https://demo-toko-keren.vercel.app"
+  },
+  "steps": [
+    {
+      "action": "goto",
+      "value": "/"
+    },
+    {
+      "assert": "visible",
+      "selector": ".brand",
+      "description": "Header brand Lospecados tampil"
+    },
+    {
+      "assert": "visible",
+      "selector": ".product",
+      "description": "Minimal 1 produk tampil (tanpa loading state)"
+    },
+    {
+      "assert": "visible",
+      "selector": ".slider",
+      "description": "Banner slider tampil"
+    }
+  ]
+}
