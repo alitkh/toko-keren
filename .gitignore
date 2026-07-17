@@ -1,0 +1,16 @@
+# env secrets
+node_modules
+dist
+.env
+*.log
+.env.*
+!.env.example
+dist-ssr
+*.local
+.vscode/*
+.idea
+.DS_Store
+
+# temp debug scripts
+_fbverify.mjs
+check.mjs

@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Test mode: izinkan baca/tulis tanpa auth.
+    // TODO: perketat nanti (hanya owner/admin bisa tulis, customer hanya baca produknya).
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
