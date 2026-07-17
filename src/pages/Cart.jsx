@@ -14,6 +14,13 @@ export default function Cart() {
   const { products } = useProducts()
   const [form, setForm] = useState({ name: '', phone: '', address: '', method: 'cod', date: '', time: '', lat: null, lng: null, label: 'Rumah' })
   const [done, setDone] = useState(null)
+  const [voucher, setVoucher] = useState('')
+  const [voucherMsg, setVoucherMsg] = useState('')
+  const [discount, setDiscount] = useState(0)
+  const SHIP_FLAT = 5000
+  const FREE_SHIP_MIN = 50000
+  const shipCost = total >= FREE_SHIP_MIN ? 0 : SHIP_FLAT
+  const grandTotal = Math.max(0, total - discount) + shipCost
   function pickAddr(v) { setForm({ ...form, lat: v.lat, lng: v.lng, address: v.address || form.address }) }
   const navigate = useNavigate()
 
@@ -21,6 +28,18 @@ export default function Cart() {
     .map(([id, qty]) => { const p = products.find((x) => x.id === id); return p ? { ...p, qty } : null })
     .filter(Boolean)
   const total = items.reduce((s, i) => s + i.price * i.qty, 0)
+
+  function applyVoucher() {
+    const code = voucher.trim().toUpperCase()
+    const list = settings?.vouchers || []
+    const found = list.find((v) => v.code === code)
+    if (found) {
+      const d = Math.round(total * (found.percent || 0) / 100)
+      setDiscount(d); setVoucherMsg('Voucher ' + found.percent + '% diterapkan')
+    } else if (code === 'MILS10') { setDiscount(Math.round(total * 0.1)); setVoucherMsg('Voucher 10% diterapkan') }
+    else if (code === 'GRATISONGKIR') { setDiscount(0); setVoucherMsg('Voucher gratis ongkir (pakai di ongkir)') }
+    else if (code) { setVoucherMsg('Kode tidak valid') }
+  }
 
   async function checkout() {
     if (!items.length || !form.name) return
@@ -31,7 +50,7 @@ export default function Cart() {
       lat: form.lat, lng: form.lng, addressLabel: form.label,
       status: 'menunggu', createdAt: Date.now(),
       items: items.map((i) => ({ productId: i.id, name: i.name, qty: i.qty, price: i.price })),
-      totalPrice: total, courierId: null,
+      totalPrice: grandTotal, discount, shipCost, courierId: null,
     }
     const stored = JSON.parse(localStorage.getItem('milstime_orders') || '[]')
     stored.push(order)
@@ -70,9 +89,19 @@ export default function Cart() {
       ))}
 
       <div className="card" style={{ marginTop: 12 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 18, color: 'var(--navy)' }}>
-          <span>Total</span><span>Rp {total.toLocaleString('id-ID')}</span>
+        <div className="row-bw"><span>Subtotal</span><span>Rp {total.toLocaleString('id-ID')}</span></div>
+        <div className="row-bw"><span>Ongkir</span><span>{shipCost === 0 ? 'Gratis' : 'Rp ' + shipCost.toLocaleString('id-ID')}</span></div>
+        {discount > 0 && <div className="row-bw" style={{ color: 'var(--orange)' }}><span>Diskon voucher</span><span>-Rp {discount.toLocaleString('id-ID')}</span></div>}
+        <div className="row-bw" style={{ fontWeight: 800, fontSize: 18, color: 'var(--navy)', marginTop: 4 }}><span>Total</span><span>Rp {grandTotal.toLocaleString('id-ID')}</span></div>
+      </div>
+
+      <div className="card" style={{ marginTop: 12 }}>
+        <div className="section-title" style={{ marginTop: 0 }}>Voucher</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input placeholder="Kode voucher" value={voucher} onChange={(e) => setVoucher(e.target.value)} style={{ flex: 1 }} />
+          <button className="btn sm" onClick={applyVoucher}>Pakai</button>
         </div>
+        {voucherMsg && <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>{voucherMsg}</div>}
       </div>
 
       <div className="card" style={{ marginTop: 12 }}>
