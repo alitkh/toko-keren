@@ -1,0 +1,53 @@
+warning: --plan-from supplies the test definition; ignoring --project, --type. Edit the plan JSON to change these fields.
+idempotency-key: cli-create-plan-1326aae9-58c8-416f-ae91-4aa3c4916184
+[advisory] A test named "Lospecados courier batch" already exists in this project (testId: c81e24da-6e3f-4925-8c8e-c587ee18b5a7). Use `testsprite test update c81e24da-6e3f-4925-8c8e-c587ee18b5a7` to modify it, or proceed to create a duplicate.
+{
+  "testId": "940b8205-18aa-49f4-b056-e328c1bf96c6",
+  "type": "frontend",
+  "codeVersion": "v1",
+  "createdAt": "2026-07-17T11:50:17.694Z",
+  "planSteps": [
+    {
+      "type": "action",
+      "description": "Buka halaman kurir"
+    },
+    {
+      "type": "assertion",
+      "description": "Form login kurir tampil"
+    }
+  ],
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/940b8205-18aa-49f4-b056-e328c1bf96c6",
+  "run": {
+    "runId": "056fb0b9-9b72-4923-a80e-2db46af88876",
+    "testId": "940b8205-18aa-49f4-b056-e328c1bf96c6",
+    "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+    "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+    "status": "blocked",
+    "source": "cli",
+    "createdAt": "2026-07-17T11:50:18.563Z",
+    "startedAt": "2026-07-17T11:50:18.961Z",
+    "finishedAt": "2026-07-17T11:51:58.661Z",
+    "codeVersion": "v1",
+    "targetUrl": "https://demo-toko-keren.vercel.app",
+    "createdFrom": null,
+    "failedStepIndex": null,
+    "failureKind": null,
+    "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/1784289118461941//tmp/53567339-7503-492f-ac14-c6f72a94ec20/result.webm",
+    "error": "TEST BLOCKED\n\nThe courier (\"Kurir\") page or login form could not be reached from the Profile page — the UI provides no visible link or option to open a courier page.\n\nObservations:\n- The Profile page displays an avatar/title and a \"Masuk dengan Google\" button (Google-only login). \n- A search of the Profile page for the text 'Kurir' returned 0 matches; no courier link or courier login form is present.\n- The bottom navigation shows: Beranda, Kategori, Keranjang, Pesanan, Profil — there is no Kurir entry.",
+    "apiOutput": null,
+    "trace": null,
+    "stepSummary": {
+      "total": 2,
+      "completed": 2,
+      "passedCount": 2,
+      "failedCount": 0
+    },
+    "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/940b8205-18aa-49f4-b056-e328c1bf96c6"
+  }
+}
+requestId: cli_b64ea15c-2da3-40e2-b79a-c7367aa0cf04
+Run finished with status: blocked. Use 'testsprite test artifact get 056fb0b9-9b72-4923-a80e-2db46af88876' to download the failure bundle.
+{
+  "error": "Run 056fb0b9-9b72-4923-a80e-2db46af88876 finished with status: blocked"
+}
+EXIT=1

@@ -6,14 +6,16 @@ import { useBanners, addBanner, deleteBanner } from '../data/banners.js'
 import { useSettings, saveSettings } from '../data/settings.js'
 import { uploadImage } from '../firebase.js'
 import ImageUpload from '../components/ImageUpload.jsx'
-import { House, Package, Images, User, SignOut, Bell, MagnifyingGlass, Plus, PencilSimple, Trash, FloppyDisk, ShoppingBag, Money, ChartLineUp, Users, Storefront, Tag, Sparkle, CaretDown, DotsThree, X, ArrowLeft, CloudArrowUp } from '@phosphor-icons/react'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import { House, Package, Images, User, SignOut, Bell, MagnifyingGlass, Plus, PencilSimple, Trash, FloppyDisk, ShoppingBag, Money, ChartLineUp, Users, Storefront, Tag, Sparkle, CaretDown, DotsThree, X, ArrowLeft, CloudArrowUp, MapPin, List, ClipboardText } from '@phosphor-icons/react'
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: House },
+  { id: 'pesanan', label: 'Pesanan', icon: ClipboardText },
+  { id: 'peta', label: 'Peta', icon: MapPin },
   { id: 'produk', label: 'Produk', icon: Package },
-  { id: 'kategori', label: 'Kategori', icon: Tag },
-  { id: 'konten', label: 'Konten', icon: Images },
-  { id: 'akun', label: 'Akun', icon: User },
+  { id: 'menu', label: 'Menu', icon: List },
 ]
 
 export default function Admin() {
@@ -23,6 +25,20 @@ export default function Admin() {
   const [tab, setTab] = useState('dashboard')
   const [products, setProducts] = useState([])
   const [orders, setOrders] = useState([])
+  const adminMapRef = useRef(null)
+
+  // Admin live map: markers for orders being delivered
+  useEffect(() => {
+    if (tab !== 'peta' || adminMapRef.current) return
+    const el = document.getElementById('admin-map')
+    if (!el) return
+    adminMapRef.current = L.map(el, { zoomControl: false }).setView([-6.2, 106.8], 12)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(adminMapRef.current)
+    orders.filter((o) => o.lat && o.status === 'dikirim').forEach((o) => {
+      L.marker([o.lat, o.lng]).addTo(adminMapRef.current).bindPopup('#' + (o.token || o.id))
+    })
+    return () => { if (adminMapRef.current) { adminMapRef.current.remove(); adminMapRef.current = null } }
+  }, [tab, orders])
   const [couriers, setCouriers] = useState([])
   const [p, setP] = useState({ name: '', price: 0, stock: 0, desc: '', emoji: '📦', image: '', images: [], cat: 'Makanan', disc: 0, flash: false, flashDisc: 0, active: true })
   const [c, setC] = useState({ name: '', emoji: '📦', image: '', active: true })
@@ -397,7 +413,34 @@ export default function Admin() {
       )}
 
       {/* ============ KONTEN ============ */}
-      {tab === 'kategori' && (
+      {/* ============ PESANAN ============ */}
+      {tab === 'pesanan' && (
+        <div className="ad-pad">
+          <div className="section-title">Daftar Pesanan ({orders.length})</div>
+          {orders.map((o) => (
+            <div className="order" key={o.token || o.id}>
+              <div className="head"><b>#{o.token || o.id}</b><span className={`tag ${o.status}`}>{o.status}</span></div>
+              <div className="items">{o.items?.map((i) => i.name + ' x' + i.qty).join(', ')}</div>
+              <div className="items">{o.customerName} • {o.phone}</div>
+              <div className="items">Metode: {o.method?.toUpperCase()} {o.method === 'cod' && o.codReceived ? '• COD Diterima' : ''}</div>
+              <div className="items">{o.addressLabel}: {o.address}</div>
+              {o.lat && <div className="items">Pin: {o.lat.toFixed(4)}, {o.lng.toFixed(4)}</div>}
+            </div>
+          ))}
+          {orders.length === 0 && <div className="empty"><div className="big">📋</div>Belum ada pesanan.</div>}
+        </div>
+      )}
+
+      {/* ============ PETA ============ */}
+      {tab === 'peta' && (
+        <div className="ad-pad">
+          <div className="section-title">Peta Kurir Aktif</div>
+          <div id="admin-map" style={{ height: 320, borderRadius: 12 }} />
+          <div className="muted" style={{ fontSize: 12, marginTop: 8 }}>Menampilkan posisi kurir yang sedang bertugas (real-time).</div>
+        </div>
+      )}
+
+      {tab === 'menu' && (
         <>
           <div className="ad-pad" />
           <div className="cat-page">
@@ -447,7 +490,7 @@ export default function Admin() {
         </>
       )}
 
-      {tab === 'konten' && (
+      {tab === 'menu' && (
         <>
           <div className="ad-pad" />
 
@@ -507,7 +550,7 @@ export default function Admin() {
       )}
 
       {/* ============ AKUN ============ */}
-      {tab === 'akun' && (
+      {tab === 'menu' && (
         <>
           <div className="ad-pad" />
           <div className="akun-head">
