@@ -33,7 +33,7 @@ export default function Layout() {
             {logoImage
               ? <img src={logoImage} alt={settings?.brandName || 'logo'} style={{ width: 30, height: 30, borderRadius: 8, marginRight: 6, objectFit: 'cover' }} />
               : <span style={{ fontSize: 18, marginRight: 6 }}>{logoEmoji}</span>}
-            <span className="brand-mark"><span className="brand-mils">{brand[0]}</span><span className="brand-time">{brand[1] || ''}</span><span className="brand-line" /></span>
+            <span className="brand-mark"><span className="brand-text">{settings?.brandName || (brand[0] + ' ' + (brand[1] || ''))}</span><span className="brand-line" /></span>
           </div>
         </div>
         <button className="bell" onClick={() => navigate('/orders')} aria-label="Notifikasi pesanan">

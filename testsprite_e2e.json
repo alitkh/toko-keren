@@ -1,0 +1,84 @@
+warning: --plan-from supplies the test definition; ignoring --project, --type. Edit the plan JSON to change these fields.
+idempotency-key: cli-create-plan-c397ba80-ed39-4d6e-9ad5-2360565630f1
+{
+  "testId": "4c5131e9-eea5-4507-8204-63cf9f355951",
+  "type": "frontend",
+  "codeVersion": "v1",
+  "createdAt": "2026-07-17T12:06:14.354Z",
+  "planSteps": [
+    {
+      "type": "action",
+      "description": "Buka beranda toko"
+    },
+    {
+      "type": "assertion",
+      "description": "Brand Toko Keren tampil"
+    },
+    {
+      "type": "assertion",
+      "description": "Navigasi bawah tampil"
+    },
+    {
+      "type": "action",
+      "description": "Buka halaman kategori"
+    },
+    {
+      "type": "assertion",
+      "description": "Grid kategori tampil"
+    },
+    {
+      "type": "action",
+      "description": "Buka keranjang"
+    },
+    {
+      "type": "action",
+      "description": "Buka kurir"
+    },
+    {
+      "type": "assertion",
+      "description": "Form login kurir tampil"
+    },
+    {
+      "type": "action",
+      "description": "Buka admin"
+    },
+    {
+      "type": "assertion",
+      "description": "Tab admin tampil"
+    }
+  ],
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/4c5131e9-eea5-4507-8204-63cf9f355951",
+  "run": {
+    "runId": "77e125d1-7314-438e-9b98-b2266a109957",
+    "testId": "4c5131e9-eea5-4507-8204-63cf9f355951",
+    "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+    "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+    "status": "failed",
+    "source": "cli",
+    "createdAt": "2026-07-17T12:06:15.459Z",
+    "startedAt": "2026-07-17T12:06:15.722Z",
+    "finishedAt": "2026-07-17T12:08:05.538Z",
+    "codeVersion": "v1",
+    "targetUrl": "https://demo-toko-keren.vercel.app",
+    "createdFrom": null,
+    "failedStepIndex": null,
+    "failureKind": "assertion",
+    "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/17842900826827//tmp/c7212d2a-2eed-4726-aa02-68cade290bef/result.webm",
+    "error": "TEST FAILURE\n\nThe expected brand 'Toko Keren' is not displayed on the homepage.\n\nObservations:\n- The homepage header shows logo text 'mils time', not 'Toko Keren'.\n- Searching the page for the exact text 'Toko Keren' returned no matches.\n- The bottom navigation with 'Beranda, Kategori, Keranjang, Pesanan, Profil' was visible, but the requested brand text was absent.",
+    "apiOutput": null,
+    "trace": null,
+    "stepSummary": {
+      "total": 8,
+      "completed": 8,
+      "passedCount": 1,
+      "failedCount": 7
+    },
+    "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/4c5131e9-eea5-4507-8204-63cf9f355951"
+  }
+}
+requestId: cli_51a55f47-28e7-415b-bf4c-9b039da78905
+Run finished with status: failed. Use 'testsprite test artifact get 77e125d1-7314-438e-9b98-b2266a109957' to download the failure bundle.
+{
+  "error": "Run 77e125d1-7314-438e-9b98-b2266a109957 finished with status: failed"
+}
+EXIT=1

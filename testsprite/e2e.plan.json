@@ -1,0 +1,18 @@
+{
+  "name": "Lospecados full storefront e2e",
+  "type": "frontend",
+  "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+  "target": { "url": "https://demo-toko-keren.vercel.app" },
+  "planSteps": [
+    { "type": "action", "action": "goto", "value": "/", "description": "Buka beranda toko" },
+    { "type": "assertion", "assert": "contains", "value": "Toko Keren", "description": "Brand Toko Keren tampil" },
+    { "type": "assertion", "assert": "visible", "selector": ".bottomnav", "description": "Navigasi bawah tampil" },
+    { "type": "action", "action": "goto", "value": "/kategori", "description": "Buka halaman kategori" },
+    { "type": "assertion", "assert": "visible", "selector": ".cat-grid", "description": "Grid kategori tampil" },
+    { "type": "action", "action": "goto", "value": "/cart", "description": "Buka keranjang" },
+    { "type": "action", "action": "goto", "value": "/courier", "description": "Buka kurir" },
+    { "type": "assertion", "assert": "visible", "selector": ".btn", "description": "Form login kurir tampil" },
+    { "type": "action", "action": "goto", "value": "/admin", "description": "Buka admin" },
+    { "type": "assertion", "assert": "visible", "selector": ".admin-tab", "description": "Tab admin tampil" }
+  ]
+}

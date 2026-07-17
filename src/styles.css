@@ -585,3 +585,5 @@ textarea { width: 100%; border: 1px solid var(--line); border-radius: 10px; padd
 .qris-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 12px; margin-top: 10px; }
 
 .row-bw { display: flex; justify-content: space-between; padding: 3px 0; font-size: 14px; }
+
+.brand-text { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.03em; }
