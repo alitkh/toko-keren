@@ -107,6 +107,7 @@ export default function Beranda() {
               return (
                 <div className="flash-card" key={p.id}>
                   <div className="flash-thumb" onClick={() => setOpenId(p.id)}>{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }} /> : null}<span style={{ display: p.image ? 'none' : 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>{p.emoji || '📦'}</span></div>
+                  <div className="flash-info">
                   <div className="flash-name" onClick={() => setOpenId(p.id)}>{p.name}</div>
                   <div className="flash-price">Rp {price?.toLocaleString('id-ID')}</div>
                   <div className="flash-old">Rp {p.price?.toLocaleString('id-ID')}</div>
@@ -115,6 +116,7 @@ export default function Beranda() {
                       ? <div className="qty"><button className="btn ghost sm" onClick={() => sub(p.id)}><Minus size={14} /></button><b>{n}</b><button className="btn sm" onClick={() => add(p.id)}><Plus size={14} /></button></div>
                       : <button className="btn block sm" onClick={() => add(p.id)}><Plus size={14} /> Keranjang</button>}
                   </div>
+              </div>
                 </div>
               )
             })}
