@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot } from 'firebase/firestore'
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, initializeFirestore, CACHE_SIZE_UNLIMITED } from 'firebase/firestore'
 import { getDatabase, ref, set, onValue, push } from 'firebase/database'
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -21,7 +21,11 @@ let app = null, auth = null, db = null, rtdb = null, storage = null
 if (configured) {
   app = initializeApp(firebaseConfig)
   auth = getAuth(app)
-  db = getFirestore(app)
+  try {
+    db = initializeFirestore(app, { localCache: { kind: 'persistent', cacheSizeBytes: CACHE_SIZE_UNLIMITED } })
+  } catch (e) {
+    db = getFirestore(app)
+  }
   rtdb = getDatabase(app)
   try { storage = getStorage(app) } catch (e) { storage = null; console.warn('[firebase] Storage belum aktif:', e.message) }
 } else {

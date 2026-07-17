@@ -8,9 +8,11 @@ import Beranda from './pages/Beranda.jsx'
 import Cart from './pages/Cart.jsx'
 import Orders from './pages/Orders.jsx'
 import Profile from './pages/Profile.jsx'
-import Admin from './pages/Admin.jsx'
-import Courier from './pages/Courier.jsx'
-import Track from './pages/Track.jsx'
+import { lazy, Suspense } from 'react'
+const AdminLazy = lazy(() => import('./pages/Admin.jsx'))
+const CourierLazy = lazy(() => import('./pages/Courier.jsx'))
+const TrackLazy = lazy(() => import('./pages/Track.jsx'))
+
 import './styles.css'
 
 class ErrorBoundary extends React.Component {
@@ -44,11 +46,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/orders" element={<Orders />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><AdminLazy /></Suspense>} />
           <Route element={<OwnerLayout />}>
-            <Route path="/courier" element={<Courier />} />
+            <Route path="/courier" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><CourierLazy /></Suspense>} />
           </Route>
-          <Route path="/track/:token" element={<Track />} />
+          <Route path="/track/:token" element={<Suspense fallback={<div style={{padding:24,textAlign:'center',color:'#6B7280'}}>Memuat…</div>}><TrackLazy /></Suspense>} />
         </Routes>
       </CartProvider>
     </BrowserRouter>
