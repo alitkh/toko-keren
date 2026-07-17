@@ -146,8 +146,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--o
 .flash-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .flash-title { display: inline-flex; align-items: center; gap: 6px; color: #E11D1D; font-weight: 800; font-size: 16px; animation: flashPulse 1.4s ease-in-out infinite; }
 .flash-clock { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 14px; color: #fff; background: #E11D1D; padding: 4px 10px; border-radius: 999px; }
-.flash-card { flex: 0 0 auto; width: 132px; background: #fff; border: 1px solid #FFD7D7; border-radius: var(--radius); padding: 10px; }
-.flash-thumb { width: 100%; height: 120px; background: linear-gradient(135deg,#FFE3E3,#FFC9C9); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 8px; cursor: pointer; overflow: hidden; }
+.flash-card { flex: 0 0 auto; width: 200px; background: #fff; border: 1px solid #FFD7D7; border-radius: var(--radius); padding: 10px; display: flex; gap: 10px; align-items: center; }
+.flash-thumb { width: 112px; height: 112px; flex: 0 0 auto; background: linear-gradient(135deg,#FFE3E3,#FFC9C9); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 8px; cursor: pointer; overflow: hidden; }
 .flash-name { font-size: 13px; font-weight: 700; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
 .flash-price { font-size: 14px; font-weight: 800; color: #E11D1D; }
 .flash-old { font-size: 11px; color: var(--muted); text-decoration: line-through; margin-bottom: 8px; }
