@@ -142,7 +142,7 @@ export default function Admin() {
   async function saveBan(e) {
     e.preventDefault(); if (!b.title) return
     try {
-      if (db) await addBanner({ title: b.title, subtitle: b.subtitle, emoji: b.emoji, color: b.color })
+      if (db) await addBanner({ title: b.title, subtitle: b.subtitle, emoji: b.emoji, color: b.color, image: b.image })
       notify('Banner ditambah')
       setB({ title: '', subtitle: '', emoji: '🎉', color: 'linear-gradient(135deg,#1B2A4A,#FF7A1A)' })
     } catch (err) { notify('Gagal tambah banner: ' + (err?.message || err), 'err') }
