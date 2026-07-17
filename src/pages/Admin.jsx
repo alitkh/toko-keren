@@ -31,7 +31,7 @@ export default function Admin() {
   const { cats } = useCategories()
   const { banners } = useBanners()
   const { settings } = useSettings()
-  const [s, setS] = useState({ brandName: 'mils time', logoEmoji: '🍱', logoImage: '', navy: '#1B2A4A', orange: '#FF7A1A', flashOn: false, flashEnd: '' })
+  const [s, setS] = useState({ brandName: 'Toko Keren', logoEmoji: '🛒', logoImage: '', navy: '#1B2A4A', orange: '#FF7A1A', flashOn: false, flashEnd: '', qrisUrl: '' })
   const [loginErr, setLoginErr] = useState('')
   const [prodFilter, setProdFilter] = useState('all')
   const [prodSearch, setProdSearch] = useState('')
@@ -520,6 +520,14 @@ export default function Admin() {
             <div className="mi"><Package size={20} /> Total Produk <span className="rt">{products.length}</span></div>
             <div className="mi"><ShoppingBag size={20} /> Total Pesanan <span className="rt">{orders.length}</span></div>
           </div>
+
+          <div className="card" style={{ marginTop: 14 }}>
+            <div className="section-title" style={{ marginTop: 0 }}>Pembayaran QRIS</div>
+            <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>Upload QRIS merchant. Pelanggan scan saat checkout QRIS (verifikasi manual).</div>
+            <ImageUpload value={s.qrisUrl} onChange={(v) => setS({ ...s, qrisUrl: v })} folder="qris" label="Upload QRIS" recommend="Gambar QRIS merchant" height={160} />
+            <button className="btn block orange" type="button" onClick={saveAppearance} style={{ marginTop: 10 }}><FloppyDisk size={16} /> Simpan pembayaran</button>
+          </div>
+
           <div className="akun-logout"><button className="btn block" onClick={logout}><SignOut size={16} /> Keluar</button></div>
         </>
       )}

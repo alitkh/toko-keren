@@ -1,0 +1,53 @@
+warning: --plan-from supplies the test definition; ignoring --project, --type. Edit the plan JSON to change these fields.
+idempotency-key: cli-create-plan-9fc68798-9444-4041-8f7d-c3d68216e4e5
+[advisory] A test named "Lospecados checkout flow" already exists in this project (testId: 57e16634-86d0-4fd1-af8d-25d6847b0fa4). Use `testsprite test update 57e16634-86d0-4fd1-af8d-25d6847b0fa4` to modify it, or proceed to create a duplicate.
+{
+  "testId": "a6d2bab9-5fba-48cb-85a7-96aed37c5942",
+  "type": "frontend",
+  "codeVersion": "v1",
+  "createdAt": "2026-07-17T11:34:09.222Z",
+  "planSteps": [
+    {
+      "type": "action",
+      "description": "Buka keranjang"
+    },
+    {
+      "type": "assertion",
+      "description": "Pilihan metode COD/QRIS tampil di checkout"
+    },
+    {
+      "type": "assertion",
+      "description": "Input jadwal tanggal tampil"
+    }
+  ],
+  "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/a6d2bab9-5fba-48cb-85a7-96aed37c5942",
+  "run": {
+    "runId": "819d0a75-f16b-46a2-ae72-27b33ad6d22c",
+    "testId": "a6d2bab9-5fba-48cb-85a7-96aed37c5942",
+    "projectId": "1175bf13-b661-4f4f-9361-8d11e7fc54de",
+    "userId": "a4f824f8-30f1-7057-6cea-e61bc8348406",
+    "status": "passed",
+    "source": "cli",
+    "createdAt": "2026-07-17T11:34:09.638Z",
+    "startedAt": "2026-07-17T11:34:09.971Z",
+    "finishedAt": "2026-07-17T11:36:46.554Z",
+    "codeVersion": "v1",
+    "targetUrl": "https://demo-toko-keren.vercel.app",
+    "createdFrom": null,
+    "failedStepIndex": null,
+    "failureKind": null,
+    "videoUrl": "https://testsprite-videos.s3.us-east-1.amazonaws.com/a4f824f8-30f1-7057-6cea-e61bc8348406/1784288206348361//tmp/81f2bd40-2c13-49f0-a6b2-cabdc177ddf5/result.webm",
+    "error": null,
+    "apiOutput": null,
+    "trace": null,
+    "stepSummary": {
+      "total": 8,
+      "completed": 8,
+      "passedCount": 8,
+      "failedCount": 0
+    },
+    "dashboardUrl": "https://www.testsprite.com/dashboard/tests/1175bf13-b661-4f4f-9361-8d11e7fc54de/test/a6d2bab9-5fba-48cb-85a7-96aed37c5942"
+  }
+}
+requestId: cli_02f517b7-483e-4e2a-ab0f-95ab1e8a78b1
+EXIT=0

@@ -4,13 +4,17 @@ import { useCart } from '../context/Cart.jsx'
 import { useProducts } from '../data/products.js'
 import { db, doc, setDoc } from '../firebase.js'
 import { useCustomer } from '../data/auth.js'
+import { useSettings } from '../data/settings.js'
+import AddressPicker from '../components/AddressPicker.jsx'
 
 export default function Cart() {
   const { cart, sub, add, remove, clear } = useCart()
   const { user } = useCustomer()
+  const { settings } = useSettings()
   const { products } = useProducts()
   const [form, setForm] = useState({ name: '', phone: '', address: '', method: 'cod', date: '', time: '', lat: null, lng: null, label: 'Rumah' })
   const [done, setDone] = useState(null)
+  function pickAddr(v) { setForm({ ...form, lat: v.lat, lng: v.lng, address: v.address || form.address }) }
   const navigate = useNavigate()
 
   const items = Object.entries(cart)
@@ -81,6 +85,8 @@ export default function Cart() {
           </select>
         </div>
         <div className="field"><label>Alamat</label><textarea rows={2} placeholder="Alamat lengkap + patokan" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></div>
+        <div className="muted" style={{ fontSize: 12 }}>Tap peta untuk titik alamat:</div>
+        <AddressPicker lat={form.lat} lng={form.lng} onPick={pickAddr} />
         <div className="field"><label>Jadwal kirim — Tanggal</label><input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
         <div className="field"><label>Jam</label><input type="time" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} /></div>
         <div className="section-title" style={{ marginTop: 8 }}>Metode pembayaran</div>
@@ -90,7 +96,14 @@ export default function Cart() {
         </div>
         {form.method === 'qris' && (
           <div className="qris-box">
-            <div className="muted" style={{ fontSize: 13 }}>Scan QRIS merchant untuk membayar. Admin verifikasi manual.</div>
+            {settings?.qrisUrl ? (
+              <>
+                <img src={settings.qrisUrl} alt="QRIS" style={{ width: 160, height: 160, objectFit: 'contain', borderRadius: 8, background: '#fff', display: 'block', margin: '0 auto 8px' }} />
+                <div className="muted center" style={{ fontSize: 13 }}>Scan QRIS di atas untuk membayar <b>Rp {total.toLocaleString('id-ID')}</b>. Admin verifikasi manual.</div>
+              </>
+            ) : (
+              <div className="muted" style={{ fontSize: 13 }}>QRIS merchant belum diatur admin. Pilih COD atau hubungi toko.</div>
+            )}
           </div>
         )}
         <button className="btn block" onClick={checkout}>Pesan sekarang</button>
