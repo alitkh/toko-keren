@@ -7,12 +7,9 @@ const LS_PRODUCTS = 'milstime_products'
 export function useProducts() {
   const [products, setProducts] = useState(() => {
     try { if (typeof window !== 'undefined') { const r = window.localStorage.getItem(LS_PRODUCTS); if (r) return JSON.parse(r) } } catch (e) {}
-    return []
+    return DUMMY_PRODUCTS
   })
-  const [loading, setLoading] = useState(() => {
-    try { if (typeof window !== 'undefined') { return !window.localStorage.getItem(LS_PRODUCTS) } } catch (e) {}
-    return true
-  })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     let active = true

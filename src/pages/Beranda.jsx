@@ -23,7 +23,7 @@ function getCountdown() {
 }
 
 export default function Beranda() {
-  const { products, loading } = useProducts()
+  const { products } = useProducts()
   const { cats } = useCategories()
   const { banners, loading: bannersLoading } = useBanners()
   const { settings, loading: settingsLoading } = useSettings()
@@ -146,9 +146,7 @@ export default function Beranda() {
         </select>
       </div>
 
-      {loading ? (
-        <div className="empty"><div className="big">⏳</div>Memuat produk…</div>
-      ) : list.length === 0 ? (
+      {list.length === 0 ? (
         <div className="empty"><div className="big">🔍</div><p>{q ? `Tidak ada hasil untuk "${q}".` : 'Belum ada produk.'}<br />Tambah lewat <a href="/admin">admin</a>.</p></div>
       ) : (
         <div className="grid">
